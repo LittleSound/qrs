@@ -20,7 +20,7 @@
   "dependencies": {
     "birpc": "^0.2.19",
     "js-base64": "^3.7.7",
-    "qr-scanner": "^1.4.2",
+    "qr-scanner": "github:qifi-dev/qr-scanner#7621e78f311c7c3cb254bff1c54d1d8776b5770c",
     "uqr": "^0.1.2"
   },
   "devDependencies": {

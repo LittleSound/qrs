@@ -110,6 +110,31 @@ onMounted(async () => {
           error.value = e
         }
       },
+      async decodeMultiplexer(canvasContext, decode) {
+        const imageData = canvasContext.getImageData(0, 0, canvasContext.canvas.width, canvasContext.canvas.height)
+        const data = imageData.data
+        const length = data.length
+        const blue: number[] = Array.from({ length: length / 4 })
+
+        // RED-only channel
+        for (let i = 0; i < length; i += 4) {
+          data[i + 1] = data[i]!
+          blue[i / 4] = data[i + 2] ?? 0
+          data[i + 2] = data[i]!
+        }
+        canvasContext.putImageData(imageData, 0, 0)
+        await decode()
+
+        // BLUE-only channel
+        for (let i = 0; i < length; i += 4) {
+          const b = blue[i / 4] ?? 0
+          data[i] = b
+          data[i + 1] = b
+          data[i + 2] = b
+        }
+        canvasContext.putImageData(imageData, 0, 0)
+        await decode()
+      },
     })
     selectedCamera.value && qrScanner.setCamera(selectedCamera.value)
     qrScanner.setInversionMode('both')
